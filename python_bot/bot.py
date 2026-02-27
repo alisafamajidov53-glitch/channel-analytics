@@ -4,7 +4,7 @@ import logging
 import aiohttp
 from aiogram import Bot, Dispatcher, Router, F
 from aiogram.filters import CommandStart, Command
-from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.enums import ParseMode
@@ -17,6 +17,7 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+OWNER_ID = int(os.getenv("OWNER_ID", "0"))
 
 if not BOT_TOKEN:
     raise ValueError("No BOT_TOKEN provided in .env")
@@ -209,13 +210,15 @@ async def _groq_generic_call(prompt: str, system_prompt: str = "") -> str:
             return f"❌ Ошибка соединения с Groq: {e}"
 
 # --- Keyboards ---
+WEBAPP_URL = "https://alisafamajidov53-glitch.github.io/channel-analytics/"
+
 def get_main_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="📊 Анализ канала", callback_data="action_analyze_channel")],
         [InlineKeyboardButton(text="⚖️ A/B Тест Названий", callback_data="action_tool_titles"),
          InlineKeyboardButton(text="🪝 Вирусные Хуки", callback_data="action_tool_hooks")],
         [InlineKeyboardButton(text="🎬 Генератор Сценариев Pro", callback_data="action_tool_script")],
-        [InlineKeyboardButton(text="🌍 Открыть Web-App", url="https://example.com/")]
+        [InlineKeyboardButton(text="📱 Открыть Mini App", web_app=WebAppInfo(url=WEBAPP_URL))]
     ])
 
 def get_back_keyboard():
@@ -231,17 +234,24 @@ def get_cancel_keyboard():
 # --- Handlers ---
 @router.message(CommandStart())
 async def cmd_start(message: Message, state: FSMContext):
+    if OWNER_ID and message.from_user.id != OWNER_ID:
+        await message.answer("⛔ Этот бот работает только для владельца.")
+        return
     await state.clear()
     welcome_text = (
         "👋 <b>Добро пожаловать в Channel Analytics Pro Bot!</b>\n\n"
         "Я работаю <u>напрямую с реальными API</u> вашего YouTube и Groq.\n"
         "Отправьте мне ссылку на канал и я выдам всю настоящую статистику.\n\n"
+        "📱 Нажмите <b>\"Открыть Mini App\"</b> чтобы открыть полное приложение.\n\n"
         "<i>Выберите действие ниже:</i>"
     )
     await message.answer(welcome_text, reply_markup=get_main_keyboard())
 
 @router.callback_query(F.data == "action_main_menu")
 async def callback_main_menu(callback: CallbackQuery, state: FSMContext):
+    if OWNER_ID and callback.from_user.id != OWNER_ID:
+        await callback.answer("⛔ Доступ запрещён", show_alert=True)
+        return
     await state.clear()
     await callback.message.edit_text(
         "👋 Вы вернулись в главное меню.\nВыберите действие:",

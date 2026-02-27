@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Channel Analytics Pro — AI-аналитика канала</title>
+    <meta name="description"
+        content="Channel Analytics Pro — Free AI-powered YouTube channel analytics dashboard. Video analysis, SEO optimization, competitor comparison, and growth strategy with GPT-OSS, Llama, and Groq Vision AI.">
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Channel Analytics Pro — AI YouTube Analytics">
+    <meta property="og:description"
+        content="Free AI-powered YouTube channel analytics dashboard with video analysis, SEO optimization, competitor comparison, and growth strategy.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Channel Analytics Pro">
+    <meta name="twitter:description" content="Free AI-powered YouTube channel analytics dashboard">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;600;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#05050f">
+</head>
+
+<body>
+    <!-- RADICAL REDESIGN: NEBULA BG -->
+    <div class="nebula-bg">
+        <div class="nebula-blob blob-1"></div>
+        <div class="nebula-blob blob-2"></div>
+        <div class="nebula-blob blob-3"></div>
+    </div>
+    <!-- Loading -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader">
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+            <span class="loader-text">Channel Analytics Pro</span>
+        </div>
+    </div>
+
+    <!-- SETUP SCREEN — 2-Step Wizard -->
+    <div class="auth-screen" id="authScreen">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <div class="auth-logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20V10M18 20V4M6 20v-4" />
+                    </svg></div>
+                <h1 class="auth-title">Channel Analytics Pro</h1>
+                <p class="auth-subtitle" data-i18n="auth_subtitle">AI-аналитика YouTube канала</p>
+            </div>
+            <!-- Step Indicators -->
+            <div class="wizard-steps">
+                <div class="step-indicator active" data-step="1"><span class="step-num">1</span><span class="step-label"
+                        data-i18n="wizard_step1">YouTube API</span></div>
+                <div class="step-connector"></div>
+                <div class="step-indicator" data-step="2"><span class="step-num">2</span><span class="step-label"
+                        data-i18n="wizard_step2">AI Keys</span></div>
+            </div>
+            <!-- Step 1: YouTube API + Channel -->
+            <div class="wizard-step active" data-step="1">
+                <h2 data-i18n="auth_setup">⚡ Step 1: Connect YouTube</h2>
+                <p class="auth-desc" data-i18n="wizard_step1_desc">YouTube API key and channel — this is all you need to
+                    start!</p>
+                <div class="auth-input-group">
+                    <label class="auth-label" data-i18n="yt_key_label">YouTube API Key <span
+                            class="label-hint">(required, free)</span></label>
+                    <input type="text" id="apiKeyInput" placeholder="AIzaSy..." class="auth-input">
+                    <label class="auth-label" style="margin-top:12px" data-i18n="channel_label">Channel</label>
+                    <input type="text" id="channelInput" placeholder="@username or channel link"
+                        data-i18n="channel_placeholder" class="auth-input">
+                    <button class="btn-primary auth-btn" id="step1Next">
+                        <span data-i18n="wizard_next">Next → Add AI Keys (optional)</span>
+                    </button>
+                    <button class="btn-secondary auth-btn btn-connect" style="margin-top:8px">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                        </svg>
+                        <span data-i18n="btn_skip_connect">Skip AI → Connect Now</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Step 2: AI Keys (optional) -->
+            <div class="wizard-step" data-step="2">
+                <h2 data-i18n="wizard_step2_title">🤖 Step 2: AI Keys (Optional)</h2>
+                <p class="auth-desc" data-i18n="wizard_step2_desc">Add AI keys to unlock video analysis, smart
+                    recommendations, and content optimization</p>
+                <div class="auth-input-group">
+                    <label class="auth-label" data-i18n="groq_label">Groq API Key <span class="label-hint">(free — 9 AI
+                            models!)</span></label>
+                    <input type="text" id="groqKeyInput" placeholder="gsk_..." class="auth-input">
+                    <a href="https://console.groq.com/keys" target="_blank" class="key-link" data-i18n="groq_link">⚡ Get
+                        free Groq key → (GPT-OSS 120B, Llama 3.3, Qwen3, Kimi K2, Gemma 2 + Vision)</a>
+
+                    <div style="display:flex;gap:10px;margin-top:12px">
+                        <button class="btn-secondary auth-btn" id="step2Back" style="flex:1">
+                            <span data-i18n="wizard_back">← Back</span>
+                        </button>
+                        <button class="btn-primary auth-btn btn-connect" style="flex:2">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                            </svg>
+                            <span data-i18n="btn_connect">Connect & Launch 🚀</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="auth-instructions">
+                <button class="instructions-toggle" id="instructionsToggle">
+                    <span data-i18n="instructions_toggle">📋 How to get API keys? (guide)</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="chevron">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </button>
+                <div class="instructions-body" id="instructionsBody">
+                    <div class="instruction-step"><span class="step-num">1</span>
+                        <div><strong data-i18n="instr_yt">YouTube API Key (Required)</strong>
+                            <p><a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a> →
+                                Project → APIs & Services → YouTube Data API v3 → Enable → Credentials → API Key</p>
+                        </div>
+                    </div>
+                    <div class="instruction-step"><span class="step-num">2</span>
+                        <div><strong data-i18n="instr_groq">Groq Key (Recommended for speed!)</strong>
+                            <p><a href="https://console.groq.com/keys" target="_blank">console.groq.com/keys</a> →
+                                Create API Key. Very fast, free Llama 3.3 and Llama 4 Scout (Vision).</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div class="app-wrapper" id="appWrapper" style="display:none">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="channel-profile">
+                    <img class="channel-avatar" id="channelAvatar" src="" alt="">
+                    <div class="channel-info"><span class="channel-name" id="channelName">Канал</span><span
+                            class="channel-subs" id="channelSubs">—</span></div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                    </svg><span data-i18n="nav_dashboard">Дашборд</span></a>
+                <a href="#" class="nav-item" data-page="videos"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <polygon points="23 7 16 12 23 17 23 7" />
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                    </svg><span data-i18n="nav_videos">Видео</span></a>
+                <a href="#" class="nav-item" data-page="shorts"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <rect x="7" y="2" width="10" height="20" rx="2" />
+                    </svg><span data-i18n="nav_shorts">Shorts</span></a>
+                <a href="#" class="nav-item" data-page="analytics"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                    </svg><span data-i18n="nav_analytics">Аналитика</span></a>
+                <a href="#" class="nav-item" data-page="schedule"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg><span data-i18n="nav_schedule">Расписание</span></a>
+                <a href="#" class="nav-item" data-page="aianalyzer"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a2 2 0 1 1 0 4h-1.17A7 7 0 0 1 14 22h-4a7 7 0 0 1-6.83-4H2a2 2 0 1 1 0-4h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z" />
+                    </svg><span data-i18n="nav_ai">🤖 AI Анализ</span></a>
+                <a href="#" class="nav-item" data-page="competitor"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="8.5" cy="7" r="4" />
+                        <line x1="20" y1="8" x2="20" y2="14" />
+                        <line x1="23" y1="11" x2="17" y2="11" />
+                    </svg><span data-i18n="nav_competitor">Конкуренты</span></a>
+                <a href="#" class="nav-item" data-page="tips"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path
+                            d="M12 2a7 7 0 0 1 7 7c0 2.4-1.2 4.5-3 5.7V17a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-2.3C6.2 13.5 5 11.4 5 9a7 7 0 0 1 7-7z" />
+                        <line x1="9" y1="21" x2="15" y2="21" />
+                    </svg><span data-i18n="nav_tips">AI Советы</span></a>
+                <a href="#" class="nav-item" data-page="chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg><span data-i18n="nav_chat">Чат с ИИ</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="btn-export" id="btnRefreshData"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10" />
+                        <polyline points="1 20 1 14 7 14" />
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                    </svg><span data-i18n="nav_refresh">Обновить</span></button>
+                <button class="btn-export" id="btnExport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg><span data-i18n="nav_export">Экспорт</span></button>
+                <button class="btn-import" id="btnLogout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg><span data-i18n="nav_logout">Сменить канал</span></button>
+                <button class="btn-export" id="langToggleBtn" onclick="toggleLang()"
+                    style="margin-top:4px;text-align:center;font-weight:700;font-size:0.85rem">🇺🇸 English</button>
+                <button class="btn-export" id="themeToggleBtn" onclick="toggleTheme()"
+                    style="margin-top:4px;text-align:center;font-weight:700;font-size:0.85rem">🌙 <span
+                        data-i18n="theme_toggle">Тёмная тема</span></button>
+            </div>
+        </aside>
+
+        <header class="mobile-header">
+            <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
+            <div class="logo-text">Analytics Pro</div>
+            <button class="btn-refresh-mobile" id="refreshMobile">↻</button>
+        </header>
+
+        <main class="main-content">
+            <div class="data-loading" id="dataLoading" style="display:none">
+                <div class="data-loading-inner">
+                    <div class="loader-ring small-ring"></div><span id="loadingStatus">Загрузка...</span>
+                </div>
+            </div>
+
+            <!-- DASHBOARD -->
+            <section class="page active" id="pageDashboard">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title" data-i18n="dash_title">Дашборд</h1>
+                        <p class="page-subtitle" data-i18n="dash_subtitle">Обзор канала</p>
+                    </div>
+                    <div class="last-updated" id="lastUpdated"></div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card" data-delay="0" data-i18n-title="tt_views"
+                        title="Всего просмотров на загруженных видео">
+                        <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg></div>
+                        <div class="stat-info"><span class="stat-label" data-i18n="stat_views">Просмотры</span><span
+                                class="stat-value" id="totalViews">0</span></div>
+                    </div>
+                    <div class="stat-card" data-delay="100" data-i18n-title="tt_videos"
+                        title="Количество проанализированных видео">
+                        <div class="stat-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polygon points="23 7 16 12 23 17 23 7" />
+                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                            </svg></div>
+                        <div class="stat-info"><span class="stat-label" data-i18n="stat_videos">Видео</span><span
+                                class="stat-value" id="totalVideos">0</span></div>
+                    </div>
+                    <div class="stat-card" data-delay="200" data-i18n-title="tt_likes" title="Сумма всех лайков">
+                        <div class="stat-icon pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg></div>
+                        <div class="stat-info"><span class="stat-label" data-i18n="stat_likes">Лайки</span><span
+                                class="stat-value" id="totalLikes">0</span></div>
+                    </div>
+                    <div class="stat-card" data-delay="300" data-i18n-title="tt_comments"
+                        title="Сумма всех комментариев">
+                        <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                            </svg></div>
+                        <div class="stat-info"><span class="stat-label"
+                                data-i18n="stat_comments">Комментарии</span><span class="stat-value"
+                                id="totalComments">0</span></div>
+                    </div>
+                    <div class="stat-card" data-delay="350" data-i18n-title="tt_eng"
+                        title="Средняя вовлеченность (Лайки + Комментарии) / Просмотры">
+                        <div class="stat-icon yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                            </svg></div>
+                        <div class="stat-info"><span class="stat-label"
+                                data-i18n="stat_engagement">Вовлечённость</span><span class="stat-value"
+                                id="avgEngagement">0%</span></div>
+                    </div>
+                    <div class="stat-card" data-delay="400" data-i18n-title="tt_rt"
+                        title="Оценочные просмотры за последние 48 часов">
+                        <div class="stat-icon orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                            </svg></div>
+                        <div class="stat-info"><span class="stat-label" data-i18n="stat_realtime">Сейчас
+                                (48ч)</span><span class="stat-value" id="realtimeViews">0</span></div>
+                    </div>
+                    <div class="stat-card" data-delay="500" data-i18n-title="tt_today"
+                        title="Оценочные просмотры за сегодня">
+                        <div class="stat-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                                <line x1="12" y1="2" x2="12" y2="4" />
+                                <line x1="12" y1="20" x2="12" y2="22" />
+                            </svg></div>
+                        <div class="stat-info"><span class="stat-label" data-i18n="stat_today">За сегодня</span><span
+                                class="stat-value" id="todayViews">0</span></div>
+                    </div>
+                    <div class="stat-card" data-delay="600" data-i18n-title="tt_time"
+                        title="Лучшее время для публикации на основе вовлеченности">
+                        <div class="stat-icon cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg></div>
+                        <div class="stat-info"><span class="stat-label" data-i18n="stat_best_time">Лучшее
+                                время</span><span class="stat-value" id="bestTime">—</span><span
+                                class="stat-change positive" id="bestDay">—</span></div>
+                    </div>
+                </div>
+
+                <!-- NEW: LATEST & TOP VIDEOS -->
+                <div class="dashboard-grid"
+                    style="display:grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 24px; margin-top: 24px;">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 data-i18n="dash_latest_video">🎬 Latest Release</h3>
+                        </div>
+                        <div id="latestVideoContainer"
+                            style="min-height: 120px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color:var(--text-muted)">Waiting for data...</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 data-i18n="dash_top_popular">👑 Top 3 Most Popular</h3>
+                        </div>
+                        <div id="topPopularContainer"
+                            style="min-height: 120px; display: flex; flex-direction: column; gap: 12px; justify-content: center;">
+                            <span style="color:var(--text-muted)">Waiting for data...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-row">
+                    <div class="chart-card large">
+                        <div class="chart-header">
+                            <h3 data-i18n="chart_views">Просмотры</h3>
+                            <div class="chart-filters"><button class="filter-btn active" data-range="7"
+                                    data-i18n="filter_7d">7д</button><button class="filter-btn" data-range="30"
+                                    data-i18n="filter_30d">30д</button><button class="filter-btn" data-range="all"
+                                    data-i18n="filter_all">Все</button>
+                            </div>
+                        </div>
+                        <div class="chart-body"><canvas id="viewsChart"></canvas></div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 data-i18n="chart_types">Типы</h3>
+                        </div>
+                        <div class="chart-body"><canvas id="contentTypeChart"></canvas></div>
+                    </div>
+                </div>
+                <div class="charts-row">
+                    <div class="chart-container" style="animation-delay: 0.4s">
+                        <div class="chart-header">
+                            <h3 class="chart-title" data-i18n="chart_tags">🏷 Облако тегов</h3>
+                        </div>
+                        <div class="tag-cloud" id="tagCloud"></div>
+                    </div>
+                    <!-- MILESTONES -->
+                    <div class="chart-container" style="animation-delay: 0.5s">
+                        <div class="chart-header">
+                            <h3 class="chart-title" data-i18n="dash_milestones">🎯 Цели канала</h3>
+                        </div>
+                        <div id="milestonesWidget" class="milestones-widget"></div>
+                    </div>
+                </div>
+                <div class="chart-card full-width">
+                    <div class="chart-header">
+                        <h3 data-i18n="chart_top5">🔥 Топ-5 видео</h3>
+                    </div>
+                    <div class="top-videos-list" id="topVideosList"></div>
+                </div>
+
+                <div class="charts-row">
+                    <!-- CHANNEL HEALTH -->
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3 class="chart-title" data-i18n="dash_health">🌟 Здоровье канала</h3>
+                        </div>
+                        <div class="health-widget" id="healthWidget"></div>
+                    </div>
+                    <!-- AI ACTION PLAN -->
+                    <div class="chart-container" style="flex:1.5">
+                        <div class="chart-header">
+                            <h3 class="chart-title" data-i18n="dash_action_plan">🧠 AI План действий</h3>
+                            <button class="btn-primary" id="btnGenerateActionPlan"
+                                style="padding:6px 12px;font-size:12px;gap:6px">
+                                ✨ <span data-i18n="action_plan_btn">Сгенерировать</span>
+                            </button>
+                        </div>
+                        <div class="action-plan-widget" id="actionPlanWidget">
+                            <div class="empty-state-small"
+                                style="text-align:left;height:100%;display:flex;align-items:center;color:var(--text-muted)"
+                                data-i18n="action_plan_empty">Нажми "Сгенерировать" для получения персонального плана на
+                                день.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RECENT ACTIVITY FEED (NEW) -->
+                <div class="chart-card full-width" style="margin-top:24px">
+                    <div class="chart-header">
+                        <h3 class="chart-title" data-i18n="dash_recent_activity">🔔 Последняя активность</h3>
+                    </div>
+                    <div class="recent-activity-container" id="recentActivityWidget">
+                        <div class="empty-state-small"
+                            style="text-align:left;display:flex;align-items:center;color:var(--text-muted)"
+                            data-i18n="loading">
+                            Загрузка...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIDEOS -->
+            <section class="page" id="pageVideos">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title" data-i18n="videos_title">Видео</h1>
+                        <p class="page-subtitle" data-i18n="videos_subtitle">Все видео</p>
+                    </div>
+                    <div class="header-actions">
+                        <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="11" cy="11" r="8" />
+                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            </svg><input type="text" id="searchVideos" placeholder="Поиск..."
+                                data-i18n="search_placeholder">
+                        </div>
+                        <select id="sortVideos" class="sort-select">
+                            <option value="date-desc" data-i18n="sort_newest">Новые</option>
+                            <option value="views-desc" data-i18n="sort_views">Просмотры ↓</option>
+                            <option value="engagement-desc" data-i18n="sort_engagement">Engagement ↓</option>
+                            <option value="likes-desc" data-i18n="sort_likes">Лайки ↓</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="videos-grid" id="videosGrid"></div>
+                <div id="videosPagination"></div>
+            </section>
+
+            <!-- SHORTS -->
+            <section class="page" id="pageShorts">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title" data-i18n="shorts_title">Shorts</h1>
+                        <p class="page-subtitle" data-i18n="shorts_subtitle">Короткие видео</p>
+                    </div>
+                </div>
+                <div class="stats-grid small">
+                    <div class="stat-card">
+                        <div class="stat-icon pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="7" y="2" width="10" height="20" rx="2" />
+                            </svg></div>
+                        <div class="stat-info"><span class="stat-label">Shorts</span><span class="stat-value"
+                                id="totalShorts">0</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            </svg></div>
+                        <div class="stat-info"><span class="stat-label" data-i18n="shorts_avg_views">Средние
+                                просмотры</span><span class="stat-value" id="avgShortsViews">0</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                            </svg></div>
+                        <div class="stat-info"><span class="stat-label">Engagement</span><span class="stat-value"
+                                id="avgShortsEngagement">0%</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg></div>
+                        <div class="stat-info"><span class="stat-label" data-i18n="stat_best_time">Лучшее
+                                время</span><span class="stat-value" id="bestShortsTime">—</span></div>
+                    </div>
+                </div>
+                <div class="chart-card full-width">
+                    <div class="chart-header">
+                        <h3 data-i18n="shorts_heatmap">🕐 Тепловая карта</h3>
+                    </div>
+                    <div class="heatmap-container" id="shortsHeatmap"></div>
+                </div>
+                <div class="chart-card full-width">
+                    <div class="chart-header">
+                        <h3 data-i18n="shorts_all">Все Shorts</h3>
+                    </div>
+                    <div class="shorts-list" id="shortsList"></div>
+                </div>
+            </section>
+
+            <!-- ANALYTICS -->
+            <section class="page" id="pageAnalytics">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title" data-i18n="analytics_title">Аналитика</h1>
+                        <p class="page-subtitle" data-i18n="analytics_subtitle">Глубокий анализ</p>
+                    </div>
+                </div>
+                <div class="charts-row">
+                    <div class="chart-card large">
+                        <div class="chart-header">
+                            <h3>📈 Engagement Rate</h3>
+                        </div>
+                        <div class="chart-body"><canvas id="engagementChart"></canvas></div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 data-i18n="chart_categories">📊 Категории</h3>
+                        </div>
+                        <div class="chart-body"><canvas id="categoryChart"></canvas></div>
+                    </div>
+                </div>
+                <div class="charts-row">
+                    <div class="chart-card large">
+                        <div class="chart-header">
+                            <h3 data-i18n="chart_growth">📅 Рост</h3>
+                        </div>
+                        <div class="chart-body"><canvas id="growthChart"></canvas></div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 data-i18n="chart_likes_comments">👍 Лайки vs Комменты</h3>
+                        </div>
+                        <div class="chart-body"><canvas id="likesCommentsChart"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="chart-card full-width">
+                    <div class="chart-header">
+                        <h3 data-i18n="chart_funnel">🌪 Воронка вовлечения</h3>
+                    </div>
+                    <div class="funnel-container" id="engagementFunnel"></div>
+                </div>
+
+                <div class="chart-card full-width">
+                    <div class="chart-header">
+                        <h3 data-i18n="table_title">🏆 Таблица</h3>
+                    </div>
+                    <div class="comparison-table-container">
+                        <table class="comparison-table" id="comparisonTable">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="th_video">Видео</th>
+                                    <th data-i18n="th_views">Просмотры</th>
+                                    <th data-i18n="th_likes">Лайки</th>
+                                    <th data-i18n="th_comments">Комменты</th>
+                                    <th>Engagement</th>
+                                    <th data-i18n="th_score">Оценка</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCHEDULE -->
+            <section class="page" id="pageSchedule">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title" data-i18n="schedule_title">Расписание</h1>
+                        <p class="page-subtitle" data-i18n="schedule_subtitle">Когда постить</p>
+                    </div>
+                </div>
+                <div class="chart-card full-width">
+                    <div class="chart-header">
+                        <h3 data-i18n="schedule_heatmap">🗓 Тепловая карта</h3>
+                    </div>
+                    <div class="heatmap-container" id="postingHeatmap"></div>
+                </div>
+                <div class="schedule-cards">
+                    <div class="schedule-card">
+                        <div class="schedule-card-icon">📹</div>
+                        <h4 data-i18n="schedule_video">Видео</h4>
+                        <div class="schedule-time" id="bestVideoTime">—</div>
+                        <div class="schedule-detail" id="bestVideoDay">—</div>
+                    </div>
+                    <div class="schedule-card">
+                        <div class="schedule-card-icon">📱</div>
+                        <h4>Shorts</h4>
+                        <div class="schedule-time" id="bestShortTime">—</div>
+                        <div class="schedule-detail" id="bestShortDay">—</div>
+                    </div>
+                    <div class="schedule-card">
+                        <div class="schedule-card-icon">🔥</div>
+                        <h4 data-i18n="schedule_worst">Худшее время</h4>
+                        <div class="schedule-time" id="worstTime">—</div>
+                        <div class="schedule-detail" id="worstDay">—</div>
+                    </div>
+                </div>
+                <div class="chart-card full-width">
+                    <div class="chart-header">
+                        <h3 data-i18n="schedule_plan">📋 План публикаций</h3>
+                    </div>
+                    <div class="weekly-plan" id="weeklyPlan"></div>
+                </div>
+            </section>
+
+            <!-- AI ANALYZER PRO -->
+            <section class="page" id="pageAianalyzer">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title" data-i18n="ai_title">🤖 AI Video Analyzer Pro</h1>
+                        <p class="page-subtitle" data-i18n="ai_subtitle">Upload video → AI generates clickbait titles,
+                            SEO tags, viral
+                            description & full optimization plan</p>
+                    </div>
+                    <div class="header-actions">
+                        <select id="aiModelSelect" class="sort-select" title="AI Model" style="margin-right:8px;">
+                            <option value="auto">🤖 Auto (GPT-OSS 120B)</option>
+                            <optgroup label="─── Production ───">
+                                <option value="groq_gpt120b">🏆 GPT-OSS 120B (Best)</option>
+                                <option value="groq_gpt20b">⚡ GPT-OSS 20B (Fast)</option>
+                                <option value="groq_llama70b">🦙 Llama 3.3 70B</option>
+                                <option value="groq_llama8b">🦙 Llama 3.1 8B (Instant)</option>
+                                <option value="groq_gemma9b">💎 Gemma 2 9B</option>
+                            </optgroup>
+                            <optgroup label="─── Preview ───">
+                                <option value="groq_qwen32b">🧠 Qwen3 32B (Reasoning)</option>
+                                <option value="groq_kimik2">🌙 Kimi K2</option>
+                                <option value="groq_compound">🔮 Compound Beta (Tools)</option>
+                                <option value="groq_vision">👁️ Llama 4 Scout (Vision)</option>
+                            </optgroup>
+                        </select>
+                        <select id="audienceSelect" class="sort-select" title="Target Audience">
+                            <option value="us">🇺🇸 US Audience</option>
+                            <option value="global">🌍 Global</option>
+                            <option value="ru">🇷🇺 Russian</option>
+                            <option value="eu">🇪🇺 European</option>
+                        </select>
+                        <button class="btn-primary" id="btnFullChannelAnalysis" data-i18n="ai_btn_channel">📊 Full
+                            Channel Analysis</button>
+                    </div>
+                    <!-- Model Info Bar -->
+                    <div id="aiModelInfoBar"
+                        style="display:flex;align-items:center;gap:10px;padding:8px 16px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;font-size:0.82rem;color:var(--text-muted);margin-top:12px;flex-wrap:wrap">
+                        <span style="color:var(--accent-blue)">&#x2139;&#xFE0F;</span>
+                        <span id="aiModelInfoText">All models powered by Groq (free). Select a model above.</span>
+                    </div>
+                </div>
+
+                <div class="ai-upload-zone" id="uploadZone">
+                    <div class="upload-icon">🎬</div>
+                    <h3 data-i18n="ai_upload_title">Drag & Drop Video Here</h3>
+                    <p data-i18n="ai_upload_sub">or click to browse files</p>
+                    <p class="upload-hint" data-i18n="ai_upload_hint">MP4, MOV, WebM — up to 100MB</p>
+                    <input type="file" id="videoFileInput" accept="video/*" hidden>
+                </div>
+
+                <div class="ai-preview" id="aiPreview" style="display:none">
+                    <video id="previewVideo" controls></video>
+                    <div class="ai-frames" id="aiFrames"></div>
+                    <button class="btn-primary ai-analyze-btn" id="btnAnalyze">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a2 2 0 1 1 0 4h-1.17A7 7 0 0 1 14 22h-4a7 7 0 0 1-6.83-4H2a2 2 0 1 1 0-4h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z" />
+                        </svg>
+                        <span data-i18n="ai_btn_analyze">🚀 Analyze with AI (US Audience)</span>
+                    </button>
+                </div>
+
+                <div class="ai-results" id="aiResults" style="display:none">
+                    <!-- Export + Provider Badge row -->
+                    <div
+                        style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+                        <div id="aiProviderBadge" style="display:none;font-family:'Outfit',sans-serif;"></div>
+                        <div style="display:flex;gap:10px;margin-left:auto">
+                            <button class="btn-secondary" onclick="regenerateAnalysis()" style="font-size:14px"
+                                title="Re-analyze with current settings">🔄 Regenerate</button>
+                            <button class="btn-primary" onclick="exportAiResults()" style="font-size:14px"
+                                data-i18n="ai_export">📄 Export to Text</button>
+                        </div>
+                    </div>
+
+                    <!-- VIDEO CONTENT ANALYSIS (NEW) -->
+                    <div class="ai-result-card">
+                        <div class="ai-result-header"><span class="ai-badge">🎬 CONTENT</span>
+                            <h3 data-i18n="ai_content_title">Video Content Analysis</h3>
+                        </div>
+                        <div class="ai-result-section">
+                            <div id="aiContentSummary"></div>
+                        </div>
+                    </div>
+
+                    <!-- PER-FRAME ANALYSIS (NEW) -->
+                    <div class="ai-result-card">
+                        <div class="ai-result-header"><span class="ai-badge">🖼️ FRAMES</span>
+                            <h3 data-i18n="ai_frame_title">Frame-by-Frame Visual Breakdown</h3>
+                        </div>
+                        <div class="ai-result-section">
+                            <div id="aiFrameAnalysis"></div>
+                        </div>
+                    </div>
+
+                    <!-- KEY MOMENTS (NEW) -->
+                    <div class="ai-result-card">
+                        <div class="ai-result-header"><span class="ai-badge">⏱️ TIMELINE</span>
+                            <h3 data-i18n="ai_moments_title">Key Moments</h3>
+                        </div>
+                        <div class="ai-result-section">
+                            <div id="aiKeyMoments"></div>
+                        </div>
+                    </div>
+
+                    <!-- RETENTION ANALYSIS (NEW) -->
+                    <div class="ai-result-card">
+                        <div class="ai-result-header"><span class="ai-badge">📊 RETENTION</span>
+                            <h3 data-i18n="ai_retention_title">Retention & Hook Analysis</h3>
+                        </div>
+                        <div class="ai-result-section">
+                            <div id="aiRetentionAnalysis"></div>
+                        </div>
+                    </div>
+
+                    <div class="ai-result-card">
+                        <div class="ai-result-header"><span class="ai-badge">🔥 VIRAL</span>
+                            <h3 data-i18n="ai_viral_title">Viral Score & Algorithm Analysis</h3>
+                        </div>
+                        <div class="ai-result-section">
+                            <div class="viral-score-bar" id="aiViralScore"></div>
+                            <div class="ai-recommendations" id="aiAlgorithmTips"></div>
+                        </div>
+                    </div>
+
+                    <div class="ai-result-card">
+                        <div class="ai-result-header"><span class="ai-badge">🎯 CLICKBAIT</span>
+                            <h3 data-i18n="ai_clickbait_title">Clickbait Titles (Pick Best One)</h3>
+                        </div>
+                        <div class="ai-result-section">
+                            <div class="ai-titles" id="aiTitles"></div>
+                        </div>
+                    </div>
+
+                    <div class="ai-result-card">
+                        <div class="ai-result-header"><span class="ai-badge">📝 SEO</span>
+                            <h3 data-i18n="ai_desc_title">YouTube Description (SEO Optimized)</h3>
+                        </div>
+                        <div class="ai-result-section">
+                            <textarea class="ai-textarea" id="aiDescription" rows="8" readonly></textarea>
+                            <button class="btn-copy" onclick="copyText('aiDescription')" data-i18n="ai_copy_desc">📋
+                                Copy Description</button>
+                        </div>
+                    </div>
+
+                    <div class="ai-result-card">
+                        <div class="ai-result-header"><span class="ai-badge">🏷 TAGS</span>
+                            <h3 data-i18n="ai_tags_title">SEO Tags & Hashtags</h3>
+                        </div>
+                        <div class="ai-result-section">
+                            <label data-i18n="ai_tags_label">🏷 Tags (click to copy individual)</label>
+                            <div class="ai-tags-list" id="aiTags"></div>
+                            <button class="btn-copy" onclick="copyTags()" data-i18n="ai_copy_tags">📋 Copy All
+                                Tags</button>
+                        </div>
+                        <div class="ai-result-section">
+                            <label data-i18n="ai_hashtags_label">#️⃣ Hashtags</label>
+                            <div class="ai-hashtags" id="aiHashtags"></div>
+                            <button class="btn-copy" onclick="copyHashtags()" data-i18n="ai_copy_hashtags">📋 Copy
+                                Hashtags</button>
+                        </div>
+                    </div>
+
+                    <div class="ai-result-card">
+                        <div class="ai-result-header"><span class="ai-badge">🪝 HOOK</span>
+                            <h3 data-i18n="ai_hook_title">Hook & First 3 Seconds Script</h3>
+                        </div>
+                        <div class="ai-result-section">
+                            <div class="ai-recommendations" id="aiHook"></div>
+                        </div>
+                    </div>
+
+                    <div class="ai-result-card">
+                        <div class="ai-result-header"><span class="ai-badge">🖼️ THUMB</span>
+                            <h3 data-i18n="ai_thumb_title">Thumbnail Ideas & Text Overlay</h3>
+                        </div>
+                        <div class="ai-result-section">
+                            <div class="ai-recommendations" id="aiThumbnail"></div>
+                        </div>
+                    </div>
+
+                    <div class="ai-result-card">
+                        <div class="ai-result-header"><span class="ai-badge">📢 CTA</span>
+                            <h3 data-i18n="ai_cta_title">Call-to-Action & Pinned Comment</h3>
+                        </div>
+                        <div class="ai-result-section">
+                            <div class="ai-recommendations" id="aiCTA"></div>
+                        </div>
+                    </div>
+
+                    <div class="ai-result-card">
+                        <div class="ai-result-header"><span class="ai-badge">⏰ TIME</span>
+                            <h3 data-i18n="ai_time_title">Best Posting Schedule</h3>
+                        </div>
+                        <div class="ai-result-section">
+                            <div class="ai-recommendations" id="aiPublishTime"></div>
+                        </div>
+                    </div>
+
+                    <div class="ai-result-card">
+                        <div class="ai-result-header"><span class="ai-badge">💡 PRO</span>
+                            <h3 data-i18n="ai_pro_title">Pro Tips & Algorithm Hacks</h3>
+                        </div>
+                        <div class="ai-result-section">
+                            <div class="ai-recommendations" id="aiRecommendations"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Full Channel Analysis Result -->
+                <div class="ai-results" id="channelAnalysisResults" style="display:none">
+                    <div class="ai-result-card" style="margin-top:24px">
+                        <div class="ai-result-header"><span class="ai-badge">📊 REPORT</span>
+                            <h3 data-i18n="ai_channel_title">Complete Channel Analysis Report</h3>
+                        </div>
+                        <div style="text-align:right;margin-bottom:12px">
+                            <button class="btn-primary" onclick="exportChannelAnalysis()" style="font-size:14px"
+                                data-i18n="ai_channel_export">📄 Export Channel Report</button>
+                        </div>
+                        <div class="ai-recommendations" id="channelAnalysisContent"></div>
+                    </div>
+                </div>
+
+                <!-- AI History -->
+                <div class="chart-card full-width" style="margin-top:24px">
+                    <div class="chart-header">
+                        <h3 data-i18n="ai_history">📂 Analysis History</h3>
+                    </div>
+                    <div class="ai-history" id="aiHistory">
+                        <div class="empty-state-small" data-i18n="ai_no_history">Пока нет анализов</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COMPETITOR -->
+            <section class="page" id="pageCompetitor">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title" data-i18n="comp_title">🔍 Анализ конкурентов</h1>
+                        <p class="page-subtitle" data-i18n="comp_subtitle">Сравните свой канал с конкурентами</p>
+                    </div>
+                </div>
+
+                <div class="competitor-input-row">
+                    <input type="text" id="competitorInput" placeholder="@username конкурента или ссылка"
+                        data-i18n="comp_placeholder" class="auth-input">
+                    <button class="btn-primary" id="btnCompare"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="20" x2="18" y2="10" />
+                            <line x1="12" y1="20" x2="12" y2="4" />
+                            <line x1="6" y1="20" x2="6" y2="14" />
+                        </svg> <span data-i18n="comp_btn">Сравнить</span></button>
+                </div>
+
+                <div id="competitorResults" style="display:none">
+                    <div class="comparison-grid" id="comparisonGrid"></div>
+                    <div class="chart-card full-width">
+                        <div class="chart-header">
+                            <h3 data-i18n="comp_chart">📊 Сравнение</h3>
+                        </div>
+                        <div class="chart-body"><canvas id="competitorChart"></canvas></div>
+                    </div>
+                    <div class="ai-result-card" style="margin-top:20px">
+                        <div class="ai-result-header"><span class="ai-badge">🤖 AI</span>
+                            <h3 data-i18n="comp_ai">AI-анализ конкурента</h3>
+                        </div>
+                        <div class="ai-recommendations" id="competitorAiAdvice"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI STUDIO (formerly TIPS) -->
+            <section class="page" id="pageTips">
+                <div class="page-header" style="margin-bottom:24px">
+                    <div>
+                        <h1 class="page-title" data-i18n="tips_title">🧠 AI Studio</h1>
+                        <p class="page-subtitle" data-i18n="tips_subtitle">Advanced AI growth tools</p>
+                    </div>
+                </div>
+
+                <div class="tabs-header"
+                    style="display:flex;gap:12px;margin-bottom:20px;overflow-x:auto;padding-bottom:10px">
+                    <button class="filter-btn active" onclick="switchStudioTab('strategy')" id="tab_strategy">📈 Channel
+                        Strategy</button>
+                    <button class="filter-btn" onclick="switchStudioTab('script')" id="tab_script"
+                        data-i18n="script_tab">🎬 Script Builder Pro (New)</button>
+                    <button class="filter-btn" onclick="switchStudioTab('ab')" id="tab_ab">⚖️ Title A/B Tester</button>
+                    <button class="filter-btn" onclick="switchStudioTab('hooks')" id="tab_hooks">🪝 Viral Hook
+                        Generator</button>
+                </div>
+
+                <!-- Tab 1: Strategy -->
+                <div id="studio_strategy" class="studio-tab active">
+                    <div
+                        style="text-align:center;padding:40px;background:rgba(255,255,255,0.02);border-radius:var(--radius-lg);border:1px solid rgba(255,255,255,0.05)">
+                        <h2 style="margin-bottom:16px;font-family:'Outfit'">Generate Complete Growth Strategy</h2>
+                        <p
+                            style="color:var(--text-secondary);margin-bottom:24px;max-width:500px;margin-left:auto;margin-right:auto">
+                            AI will analyze all your uploaded videos, finding macro trends, the best formats, and a
+                            step-by-step masterplan for growth.</p>
+                        <button class="btn-primary" id="btnAiTips"
+                            style="padding:14px 28px;font-size:1.1rem;margin:0 auto"><svg viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a2 2 0 1 1 0 4h-1.17A7 7 0 0 1 14 22h-4a7 7 0 0 1-6.83-4H2a2 2 0 1 1 0-4h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z" />
+                            </svg> <span data-i18n="tips_btn">Start Deep Analysis</span></button>
+                    </div>
+
+                    <div class="ai-result-card" id="aiTipsCard" style="display:none;margin-top:24px">
+                        <div class="ai-result-header"><span class="ai-badge">🤖 STRATEGY</span>
+                            <h3 data-i18n="tips_strategy">Personal AI Strategy</h3>
+                        </div>
+                        <div class="ai-recommendations" id="aiTipsContent"></div>
+                    </div>
+                </div>
+
+                <!-- Tab: Script Builder Pro (NEW) -->
+                <div id="studio_script" class="studio-tab" style="display:none">
+                    <div class="chart-card full-width">
+                        <div class="chart-header">
+                            <h3 data-i18n="script_title">🎬 Video Script & Idea Generator Pro</h3>
+                        </div>
+                        <p data-i18n="script_desc"
+                            style="color:var(--text-secondary);margin-bottom:20px;font-size:0.9rem">Turn any raw idea
+                            into a complete production plan. AI will generate the angle, titles, thumbnail concept, hook
+                            script, and full video outline.</p>
+
+                        <textarea id="ideaTopic" class="auth-input" rows="3" data-i18n="script_placeholder"
+                            placeholder="Describe your video idea... (e.g. 'A video about how to start learning Python in 2026 for complete beginners')"
+                            style="margin-bottom:20px;resize:vertical"></textarea>
+
+                        <button class="btn-primary" id="btnGenerateIdeas" style="width:100%" data-i18n="script_btn">✨
+                            Generate Full Production Plan</button>
+
+                        <div id="ideaResults" style="display:none;margin-top:24px">
+                            <!-- Results injected by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Title A/B Tester -->
+                <div id="studio_ab" class="studio-tab" style="display:none">
+                    <div class="chart-card full-width">
+                        <div class="chart-header">
+                            <h3>⚖️ Title A/B Tester</h3>
+                        </div>
+                        <p style="color:var(--text-secondary);margin-bottom:20px;font-size:0.9rem">Not sure which title
+                            to use? Paste 2 or 3 options and the AI will predict the best CTR based on YouTube
+                            psychology and your specific audience.</p>
+
+                        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+                            <input type="text" id="abTitle1" class="auth-input"
+                                placeholder="Title Option 1 (e.g., How I built this in 24 hours)">
+                            <input type="text" id="abTitle2" class="auth-input"
+                                placeholder="Title Option 2 (e.g., I built a website in 24 hours)">
+                            <input type="text" id="abTitle3" class="auth-input" placeholder="Title Option 3 (optional)">
+                        </div>
+
+                        <button class="btn-primary" id="btnTestTitles" onclick="testTitles()" style="width:100%">🔍
+                            Analyze Titles</button>
+
+                        <div id="abResults" style="display:none;margin-top:24px">
+                            <!-- Results injected by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Hook Generator -->
+                <div id="studio_hooks" class="studio-tab" style="display:none">
+                    <div class="chart-card full-width">
+                        <div class="chart-header">
+                            <h3>🪝 Viral Hook Generator</h3>
+                        </div>
+                        <p style="color:var(--text-secondary);margin-bottom:20px;font-size:0.9rem">The first 3 seconds
+                            dictate 80% of your video's success. Tell the AI what your video is about, and it will
+                            generate high-retention hook scripts.</p>
+
+                        <textarea id="hookTopic" class="auth-input" rows="3"
+                            placeholder="What is your video about? (e.g., A review of the new iPhone 16 Pro camera vs Samsung)"
+                            style="margin-bottom:20px;resize:vertical"></textarea>
+
+                        <button class="btn-primary" id="btnGenHooks" onclick="generateHooks()" style="width:100%">⚡
+                            Generate Viral Hooks</button>
+
+                        <div id="hookResults" style="display:none;margin-top:24px">
+                            <!-- Results injected by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI CHAT -->
+            <section class="page" id="pageChat">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title" data-i18n="chat_title">🤖 ИИ-Ассистент</h1>
+                        <p class="page-subtitle" data-i18n="chat_subtitle">Анализ канала в реальном времени</p>
+                    </div>
+                    <button class="btn-secondary" id="btnClearChat" style="font-size: 0.85rem">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            style="width:16px;height:16px;margin-right:6px">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                            </path>
+                        </svg>
+                        <span data-i18n="chat_clear">Очистить</span>
+                    </button>
+                </div>
+                <div class="chat-container-card">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="chat-message ai-message">
+                            <div class="message-avatar">🤖</div>
+                            <div class="message-bubble">
+                                <span data-i18n="chat_welcome">Привет! Я ИИ-ассистент твоего канала. Я знаю всю твою
+                                    статистику. Спроси меня о чем угодно!</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-suggestions" id="chatSuggestions">
+                        <button class="suggestion-btn" onclick="useSuggestion(this)" data-i18n="sug_best_video">🏆 Какое
+                            моё лучшее видео?</button>
+                        <button class="suggestion-btn" onclick="useSuggestion(this)" data-i18n="sug_grow">📈 Как мне
+                            вырасти?</button>
+                        <button class="suggestion-btn" onclick="useSuggestion(this)" data-i18n="sug_schedule">⏰ Когда
+                            лучше постить?</button>
+                        <button class="suggestion-btn" onclick="useSuggestion(this)" data-i18n="sug_shorts">📱 Стоит ли
+                            мне делать Shorts?</button>
+                        <button class="suggestion-btn" onclick="useSuggestion(this)" data-i18n="sug_viral">🔥 Как
+                            сделать вирусное видео?</button>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chatInput" class="auth-input" style="flex: 1"
+                            placeholder="Спроси меня о чем-то..." data-i18n="chat_placeholder">
+                        <button class="btn-primary btn-send-chat" id="btnSendChat">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- VIDEO DETAIL MODAL -->
+    <div class="modal-overlay" id="videoDetailModal">
+        <div class="modal modal-large">
+            <div class="modal-header">
+                <h2 id="detailTitle"></h2><button class="modal-close" id="detailClose">&times;</button>
+            </div>
+            <div class="modal-body" id="videoDetailBody"></div>
+            <div class="modal-footer">
+                <button class="btn-primary" id="btnShareVideo" onclick="shareVideo()" style="gap:6px">📤 <span
+                        data-i18n="modal_share">Поделиться</span></button>
+                <button class="btn-primary" id="btnAiAnalyzeVideo" data-i18n="modal_ai_btn">🤖 AI анализ этого
+                    видео</button>
+                <button class="btn-secondary" id="detailCloseBtn" data-i18n="modal_close">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- SCROLL TO TOP -->
+    <button class="scroll-top-btn" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})"
+        title="Scroll to top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="18 15 12 9 6 15" />
+        </svg>
+    </button>
+
+    <!-- AUTO-REFRESH INDICATOR -->
+    <div class="auto-refresh-bar" id="autoRefreshBar" style="display:none">
+        <span>🔄</span> <span id="autoRefreshText" data-i18n="auto_refresh">Автообновление через</span> <span
+            id="autoRefreshTimer">30:00</span>
+    </div>
+
+    <!-- AI CHAT WIDGET (Legacy Button, Redirects to Page) -->
+    <button class="ai-chat-toggle" id="aiChatToggle"
+        onclick="document.querySelector('.nav-item[data-page=\'chat\']')?.click()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+        </svg>
+    </button>
+
+    <script src="lang.js"></script>
+    <script src="ai.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

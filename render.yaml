@@ -1,0 +1,13 @@
+services:
+  - type: worker
+    name: channel-analytics-bot
+    env: python
+    buildCommand: pip install -r python_bot/requirements.txt
+    startCommand: cd python_bot && python bot.py
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: YOUTUBE_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
